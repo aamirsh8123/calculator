@@ -1,0 +1,42 @@
+<!-- templates/material_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Item Detail{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron my-2 py-0">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Material Group:</td>
+                <td>{{ item.material_group }}</td>
+            </tr>
+            <tr>
+                <td>Product Hierarchy (a):</td>
+                <td>{{ item.product_hierarchy_a }}</td>
+            </tr>
+            <tr>
+                <td>Product Hierarchy (b):</td>
+                <td>{{ item.product_hierarchy_b }}</td>
+            </tr>
+            <tr>
+                <td>Item Type</td>
+                <td>{{ item.item_type_choice }}</td>
+            </tr>
+        </tbody>
+        <tfoot> 
+        </tfoot>
+    </table>
+</div>
+<td style="float: right;"><a href="{% url 'material_list' %}"><button class="btn btn-sm btn-primary">Back</button></a></td>
+<td style="float: right;"><a href="#"><button class="btn btn-sm btn-primary">Edit</button></a></td> 
+<td style="float: right;"><a href="#"><button class="btn btn-sm btn-primary">Delete</button></a></td>
+{% endblock %}

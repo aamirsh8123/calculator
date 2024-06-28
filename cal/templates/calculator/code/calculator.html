@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Calculator{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div>
+    
+</div>
+    <form method="post">
+
+        {% csrf_token %}
+
+        {% crispy form form.helper %}
+          
+    </form>   
+{% endblock %}
+
