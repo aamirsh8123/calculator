@@ -11,22 +11,39 @@ from typing import Dict, Optional, Union
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import MaterialGroupSerializer
-from django.template.loader import get_template
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+def is_user(user):
+    return user.groups.filter(name='User').exists()
+
 
 
 # Create your views here.
 
 
-class IndexView(TemplateView):
+class IndexView(UserPassesTestMixin, TemplateView):
     template_name = 'calculator/index.html'
 
-class MaterialList(ListView):
+    def test_func(self):
+        return is_user(self.request.user) or is_admin(self.request.user)
+
+class MaterialList(UserPassesTestMixin, ListView):
     template_name = 'calculator/material/material_list.html'
     model = MaterialGroup
     context_object_name = 'items'
     paginate_by = 10  # Adjust the number as needed
 
-class MaterialDetail(TemplateView):
+    def test_func(self):
+        return is_admin(self.request.user)
+
+
+class MaterialDetail(UserPassesTestMixin, TemplateView):
     template_name = 'calculator/material/material_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -34,9 +51,13 @@ class MaterialDetail(TemplateView):
         item_id = self.kwargs.get('pk')  # 'pk' is the common convention for primary key in URLs
         context['item'] = get_object_or_404(MaterialGroup, pk=item_id)
         return context
+    def test_func(self):
+        return is_admin(self.request.user)
+    
 class MaterialUpdate(TemplateView):
     template_name = ''
 
+@user_passes_test(is_admin)
 def color_code_create(request):
     form = ColorCodeForm()
     if request.method == 'POST':
@@ -49,7 +70,7 @@ def color_code_create(request):
     context = {'form': form}
     return render(request, 'calculator/material/create_color_code.html', context)
 
-
+@user_passes_test(is_admin)
 def material_creator(request):
     form = MaterialGroupForm()
     if request.method == 'POST':
@@ -64,7 +85,7 @@ def material_creator(request):
     return render(request, 'calculator/material/create_item.html', context)
 
 
-class PopulateFieldsView(APIView):
+class PopulateFieldsView(UserPassesTestMixin, APIView):
     def get(self, request, *args, **kwargs):
         is_additive = request.GET.get('additive', None)
         swu_value = request.GET.get('swu', None)
@@ -137,7 +158,12 @@ class PopulateFieldsView(APIView):
         queryset = MaterialGroup.objects.filter(item_type_choice__id=fk)
         return MaterialGroupSerializer(queryset, many=True).data
 
+    def test_func(self):
+        return is_user(self.request.user) or is_admin(self.request.user)
 
+
+
+@user_passes_test(is_admin or is_user)
 def PopulateColorType(request):
     inkType = request.GET.get('color_type', None)
     if inkType:
@@ -147,7 +173,9 @@ def PopulateColorType(request):
         context = []
     return JsonResponse(context, safe=False)
 
-class PopulateValue(View):
+
+
+class PopulateValue(UserPassesTestMixin, View):
     def get(self, request, *args, **kwargs):
         additiveValue = request.GET.get('additive', None)
         liquiedNarrow = request.GET.get('liquied_narrow', None)
@@ -253,15 +281,22 @@ class PopulateValue(View):
                 print(f"Press Value: {context['material_group']} + {context['product_hierarchy_b']}")  # Debugging statement
 
         return JsonResponse(context)
+    
+    def test_func(self):
+        return is_user(self.request.user) or is_admin(self.request.user)
 
-class CodeList(ListView):
+
+
+class CodeList(UserPassesTestMixin, ListView):
     template_name = 'calculator/code/code_list.html'
     model = CreateCode
     context_object_name = 'items'
-    paginate_by = 10  # Adjust the number as needed
+    paginate_by = 10
 
+    def test_func(self):
+        return is_user(self.request.user) or is_admin(self.request.user)
 
-class CodeDetail(TemplateView):
+class CodeDetail(UserPassesTestMixin, TemplateView):
     template_name = 'calculator/code/code_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -269,7 +304,11 @@ class CodeDetail(TemplateView):
         item_id = self.kwargs.get('pk')  # 'pk' is the common convention for primary key in URLs
         context['item'] = get_object_or_404(CreateCode, pk=item_id)
         return context
+    
+    def test_func(self):
+        return is_user(self.request.user) or is_admin(self.request.user)
 
+@user_passes_test(is_admin or is_user)
 def mg_calculator(request):
     form = CodeCalculator()
     if request.method == 'POST':
@@ -281,4 +320,6 @@ def mg_calculator(request):
             return redirect('code_detail', pk=instance.id)
     context = {'form': form}
     return render(request, 'calculator/code/calculator.html', context)
+
+
 
