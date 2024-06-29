@@ -5,7 +5,7 @@ from cal.models import MaterialGroup, CreateCode, ColorCode
 from crispy_forms.layout import Layout, Fieldset, Div, Row, Column, Reset
 from crispy_forms.bootstrap import FormActions
 from django.utils.translation import gettext_lazy as _
-from allauth.account.forms import LoginForm
+
 
 class MaterialGroupForm(forms.ModelForm):
     class Meta:
@@ -137,6 +137,3 @@ class CodeCalculator(forms.ModelForm):
                 Reset('reset', 'Reset'),
             ),
         )
-
-class MyLoginForm(LoginForm):
-    pass

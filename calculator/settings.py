@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
 ]
 
 
@@ -86,6 +87,7 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+ACCOUNT_FORMS = {'login': 'cal.forms.CalculatorLoginForm'}
 
 WSGI_APPLICATION = 'calculator.wsgi.application'
 

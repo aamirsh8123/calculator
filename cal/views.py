@@ -7,14 +7,15 @@ from django.shortcuts import render, redirect
 from cal.forms import MaterialGroupForm, CodeCalculator, ColorCodeForm
 from django.contrib import messages
 from django.db.models import QuerySet
-from typing import Dict, Optional, Union
+from typing import Dict, Optional
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import MaterialGroupSerializer
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
+
+
+
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
@@ -27,7 +28,7 @@ def is_user(user):
 # Create your views here.
 
 
-class IndexView(UserPassesTestMixin, TemplateView):
+class IndexView(TemplateView):
     template_name = 'calculator/index.html'
 
     def test_func(self):
@@ -320,6 +321,5 @@ def mg_calculator(request):
             return redirect('code_detail', pk=instance.id)
     context = {'form': form}
     return render(request, 'calculator/code/calculator.html', context)
-
 
 
