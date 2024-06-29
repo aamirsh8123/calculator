@@ -40,11 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'crispy_forms',
     'crispy_bootstrap4',
-    'cal',
+    'cal.apps.CalConfig',
     'django_extensions',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
 ]
 
 
@@ -57,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'calculator.urls'
@@ -78,16 +74,6 @@ TEMPLATES = [
         },
     },
 ]
-
-AUTHENTICATION_BACKENDS = [
-
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
-ACCOUNT_FORMS = {'login': 'cal.forms.CalculatorLoginForm'}
 
 WSGI_APPLICATION = 'calculator.wsgi.application'
 
@@ -150,4 +136,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# CRISPY_TEMPLATE_PACK = 'uni_form'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

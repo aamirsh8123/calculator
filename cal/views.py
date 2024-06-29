@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views.generic import TemplateView, ListView, View
 from cal.models import MaterialGroup, CreateCode, ColorCode
 from django.shortcuts import get_object_or_404
@@ -13,15 +13,14 @@ from rest_framework.response import Response
 from .serializers import MaterialGroupSerializer
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.mixins import UserPassesTestMixin
-
-
+from django.contrib.auth.decorators import user_passes_test
 
 
 def is_admin(user):
-    return user.groups.filter(name='Admin').exists()
+    return user.is_superuser
 
 def is_user(user):
-    return user.groups.filter(name='User').exists()
+    return user.is_authenticated
 
 
 
@@ -164,7 +163,7 @@ class PopulateFieldsView(UserPassesTestMixin, APIView):
 
 
 
-@user_passes_test(is_admin or is_user)
+@user_passes_test(lambda user: is_admin(user) or is_user(user))
 def PopulateColorType(request):
     inkType = request.GET.get('color_type', None)
     if inkType:
@@ -309,17 +308,14 @@ class CodeDetail(UserPassesTestMixin, TemplateView):
     def test_func(self):
         return is_user(self.request.user) or is_admin(self.request.user)
 
-@user_passes_test(is_admin or is_user)
+@user_passes_test(lambda user: is_admin(user) or is_user(user))
 def mg_calculator(request):
     form = CodeCalculator()
     if request.method == 'POST':
         form = CodeCalculator(request.POST)
         if form.is_valid():
             instance = form.save()
-            # Use the name of the URL pattern instead of the template name
-            messages.success(request, 'Data Save Successfully')
+            messages.success(request, 'Data saved successfully')
             return redirect('code_detail', pk=instance.id)
     context = {'form': form}
     return render(request, 'calculator/code/calculator.html', context)
-
-

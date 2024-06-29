@@ -1,7 +1,7 @@
 from django.urls import path, include
 from cal.views import IndexView, MaterialList, MaterialDetail, PopulateFieldsView, PopulateValue, CodeList, CodeDetail
 from . import views
-
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('',IndexView.as_view(),name='index'),
@@ -15,4 +15,5 @@ urlpatterns = [
     path('get_value/',PopulateValue.as_view(),name='get-value'),
     path('get_color_choice',views.PopulateColorType,name='get-color-choice'),
     path('color/code/',views.color_code_create, name='create_color_code'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
 ]

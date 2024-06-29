@@ -1,8 +1,10 @@
 <!-- templates/base.html -->
-  {% load static %}
+{% load filters %}
+{% load static %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">    
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}My Site{% endblock %}</title>
@@ -41,51 +43,65 @@
     {% endblock %}
 </head>
 <body>
-
   <nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: fixed;">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-     
+          <span class="navbar-toggler-icon"></span>
       </button>
-       <a class="navbar-brand" href="{% url 'index' %}">My Site</a>
-          <div class="collapse navbar-collapse" id="navbarResponsive">
-              <ul class="navbar-nav mr-auto">
-                  
-                <li class="nav-item ">
-                  
-                    <a class="nav-link" href="{% url 'index' %}">Home</a>
-                  
-                    </li>
-            
+      <a class="navbar-brand" href="{% url 'index' %}">My Site</a>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">Contact</a>
+              </li>
+              {% if user.is_authenticated %}
+                  {% if user|has_group:"Admin"  %}
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Material Group</a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'material_list' %}">List of Items</a>
+                              <a class="dropdown-item" href="{% url 'create_item' %}">Add New Item</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item" href="{% url 'create_color_code' %}">Add Color Code</a>
+                          </div>
+                      </li>
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Calculator</a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'create_code' %}">Calculator</a>
+                              <a class="dropdown-item" href="{% url 'code_list' %}">Codes List</a>
+                          </div>
+                      </li>
+                  {% elif user|has_group:"User"  %}
+                      <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Calculator</a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="{% url 'create_code' %}">Calculator</a>
+                              <a class="dropdown-item" href="{% url 'code_list' %}">Codes List</a>
+                          </div>
+                      </li>
+                  {% endif %}
+                  <li class="nav-item">
+                      <form method="POST" action="{% url 'logout' %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-link nav-link" style="display: inline; padding-top: 6px;">Logout</button>
+                      </form>
+                  </li>
+              {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+                  </li>
+              {% endif %}
+          </ul>
+      </div>
+  </nav>
+  
 
-                  <li class="nav-item dropdown">
-            
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Material Group</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{% url 'material_list' %}">List of Items</a>
-                      <a class="dropdown-item" href="{% url 'create_item' %}">Add New Item</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="{% url 'create_color_code' %}">Add Color Code</a>
-                    </div>
-            
-                    </li>
-            
-                  <li class="nav-item dropdown">
-            
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Calculator</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{% url 'create_code' %}">Calculator</a>
-                      <a class="dropdown-item" href="{% url 'code_list' %}">Codes List</a>
-                    </div>
-                    </li>            
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                    </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                    </li>
-              </ul>       
-    </nav>
     <div class="container">
         {% block content %}
         

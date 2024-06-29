@@ -1,0 +1,42 @@
+<!-- templates/account/login.html -->
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+
+<h2 class="text-center py-4">{% trans "Login" %}</h2>
+        <div class="row justify-content-center">
+            <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_username">{% trans "Username" %}</label>
+                            </div>    
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form.username }}
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="id_password">{% trans "Password" %}</label>
+                            </div>    
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form.password }}
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12 text-right">
+                            <button class="btn btn-primary" type="submit">{% trans "Login" %}</button>
+                        </div>
+                    </div>
+                </form>           
+        </div>
+
+{% endblock %}
