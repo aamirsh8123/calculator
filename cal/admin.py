@@ -1,6 +1,8 @@
 from django.contrib import admin
 from cal.models import ItemType, MaterialGroup, CreateCode, ColorCode
+
 # Register your models here.
+
 class ItemTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'is_additive')
 

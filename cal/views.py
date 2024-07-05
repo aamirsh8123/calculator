@@ -53,9 +53,7 @@ class MaterialDetail(UserPassesTestMixin, TemplateView):
         return context
     def test_func(self):
         return is_admin(self.request.user)
-    
-class MaterialUpdate(TemplateView):
-    template_name = ''
+
 
 @user_passes_test(is_admin)
 def color_code_create(request):
@@ -69,6 +67,7 @@ def color_code_create(request):
             form.helper.form_action = reverse('create_color_code')
     context = {'form': form}
     return render(request, 'calculator/material/create_color_code.html', context)
+
 
 @user_passes_test(is_admin)
 def material_creator(request):

@@ -28,8 +28,8 @@ LOCALE_PATHS = [
 SECRET_KEY = 'django-insecure-w%-!g=v_l@_jp65=v3ulysqc)3kyxnx3c2so92&)ej2c_**j+y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['aamirshahzad.com', 'www.aamirshahzad.com']
-DEBUG = False
+# ALLOWED_HOSTS = ['aamirshahzad.com', 'www.aamirshahzad.com']
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
