@@ -1,16 +1,35 @@
-<!-- templates/index.html -->
-
 {% extends 'base.html' %}
-
-{% block title %}Home{% endblock %}
-
+{% block title %}Overview{% endblock %}
 {% block content %}
-
-    <div class="jumbotron my-4 py-4">
-        <h1 class="display-4">Welcome to My Site!</h1>
-        <p class="lead">This is the homepage of your new Django project.</p>
-        <hr class="my-4">
-        <p>Use this page to navigate to other parts of your site and learn more about what you offer.</p>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-    </div>
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">YOUR MATERIAL CODE WORKSPACE</p>
+    <h1>Every material.<br>A code that fits.</h1>
+    <p class="hero-description">Turn product specifications into material group and product hierarchy codes, all in one place.</p>
+    {% if user.is_authenticated %}
+    <a class="btn btn-primary btn-lg" href="{% url 'create_code' %}">Open calculator <span aria-hidden="true">↗</span></a>
+    <a class="hero-link" href="{% url 'code_list' %}">Browse saved codes →</a>
+    {% else %}
+    <a class="btn btn-primary btn-lg" href="{% url 'login' %}">Sign in to your workspace →</a>
+    {% endif %}
+  </div>
+  <div class="code-preview" aria-hidden="true">
+    <div class="preview-heading"><span class="status-dot"></span> BUILT FROM YOUR SPECIFICATIONS</div>
+    <div class="swatches"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="preview-label">THE DETAILS MAKE THE DIFFERENCE</div>
+    <div class="preview-title">Material. Color. Code.</div>
+    <div class="preview-tags"><span>Resin</span><span>Ink type</span><span>Color</span><span>Press</span></div>
+    <div class="preview-bottom">A consistent code starts here.<span>↗</span></div>
+  </div>
+</section>
+<div class="section-heading"><div><p class="eyebrow">QUICK ACCESS</p><h2>Your workspace, simplified.</h2></div><p>Choose where to begin.</p></div>
+<div class="workspace-grid">
+  <a class="workspace-card" href="{% if user.is_authenticated %}{% url 'create_code' %}{% else %}{% url 'login' %}{% endif %}"><span class="card-symbol">01 /</span><h3>Code calculator <span>↗</span></h3><p>Select your product attributes and build material group and hierarchy codes.</p><span class="card-action">Create a code →</span></a>
+  <a class="workspace-card" href="{% if user.is_authenticated %}{% url 'code_list' %}{% else %}{% url 'login' %}{% endif %}"><span class="card-symbol">02 /</span><h3>Saved codes <span>↗</span></h3><p>Find previously generated codes and review their product specifications.</p><span class="card-action">Explore your codes →</span></a>
+  {% if user.is_superuser %}
+  <a class="workspace-card" href="{% url 'material_list' %}"><span class="card-symbol">03 /</span><h3>Material library <span>↗</span></h3><p>Maintain material definitions, product hierarchies, and reference data.</p><span class="card-action">Manage materials →</span></a>
+  {% else %}
+  <div class="workspace-card guide-card"><span class="card-symbol">03 /</span><h3>A guided workflow</h3><p>Start with the additive selection. The calculator enables the relevant fields as you go.</p><span class="card-action">Built around your product</span></div>
+  {% endif %}
+</div>
 {% endblock %}

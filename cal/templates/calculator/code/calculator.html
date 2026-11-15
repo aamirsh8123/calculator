@@ -1,17 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Calculator{% endblock %}
 {% load crispy_forms_tags %}
-
+{% block title %}Calculator{% endblock %}
 {% block content %}
-<div>
-    
-</div>
-    <form method="post">
-
-        {% csrf_token %}
-
-        {% crispy form form.helper %}
-          
-    </form>   
+<div class="section-heading"><div><p class="eyebrow">CODE BUILDER</p><h1>Code calculator</h1><p class="text-muted">Choose your product specifications. Relevant fields become available as you go.</p></div><a class="btn btn-outline-secondary" href="{% url 'code_list' %}">View saved codes →</a></div>
+<section class="form-panel" aria-label="Product specifications">
+  {% crispy form form.helper %}
+</section>
 {% endblock %}
-
