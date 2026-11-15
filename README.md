@@ -12,7 +12,7 @@ A Django application for generating **Material Group** and **Product Hierarchy**
 
 ## Technology
 
-Python, Django 5.0.6, Django REST Framework, django-crispy-forms, Bootstrap 4, jQuery, and SQLite. Python 3.12 is recommended; this project has been checked with Python 3.12.9.
+Python, Django 5.2.19 (LTS), Django REST Framework, django-crispy-forms, Bootstrap 4, jQuery, and SQLite. Python 3.12 is recommended; this project has been checked with Python 3.12.9.
 
 ## Setup on Windows (PowerShell)
 
@@ -59,7 +59,7 @@ There is also a legacy nested configuration in `calculator/calculator/`. Use the
 .\venv\Scripts\python.exe manage.py test
 ```
 
-The test module currently contains no application tests. Bootstrap and jQuery are loaded from external CDNs and require browser internet access.
+The regression suite covers authentication, access permissions, material forms, dependent selections, generated values, and saving/viewing codes. Tests use a separate test database. Bootstrap and jQuery are loaded from external CDNs and require browser internet access.
 
 ## Troubleshooting
 
@@ -84,3 +84,8 @@ Remove-Item Env:PYTHONHOME -ErrorAction SilentlyContinue
 The supplied settings are for local development. Before deployment, configure a private `SECRET_KEY`, disable `DEBUG`, set `ALLOWED_HOSTS`, configure static asset serving and HTTPS, and use a production WSGI/ASGI server. Do not use Django's development server for production. Review and update dependency versions before public deployment.
 
 Virtual environments, Python caches, local databases, and environment files are excluded from new commits. Previously committed files remain in Git history; removing tracking does not erase history. Keep database backups separately.
+
+
+## Dependency security
+
+GitHub Actions checks dependencies, Django configuration, regression tests, and known dependency vulnerabilities on pushes, pull requests, and weekly. Dependabot checks Python dependencies and GitHub Actions weekly. Review and merge tested update pull requests to keep the application patched.
